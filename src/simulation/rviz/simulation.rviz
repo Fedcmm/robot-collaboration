@@ -132,7 +132,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 207; 207; 207
-    Fixed Frame: pippo/odom
+    Fixed Frame: pippo/base_link
     Frame Rate: 30
   Name: root
   Tools:

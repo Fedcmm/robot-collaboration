@@ -13,8 +13,14 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
 
+    pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
     pkg_arm = get_package_share_directory('irb1200_ros2_gazebo')
+
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
+        launch_arguments={'world': os.path.join(pkg_simulation, 'worlds', 'irb1200.world')}.items(),
+    )
 
     launch_arm = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -40,49 +46,60 @@ def generate_launch_description():
         output='screen'
     )
     
-    load_joint_state_controller = ExecuteProcess(
-        name="activate_joint_state_broadcaster",
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state", "active",
-            "-c", "pippo/controller_manager",
-            "pippo_joint_state_broadcaster",
-        ],
-        shell=False,
-        output="screen",
-    )
+    # load_joint_state_controller = ExecuteProcess(
+    #     name="activate_joint_state_broadcaster",
+    #     cmd=[
+    #         "ros2",
+    #         "control",
+    #         "load_controller",
+    #         "--set-state", "active",
+    #         "-c", "pippo/controller_manager",
+    #         "pippo_joint_state_broadcaster",
+    #     ],
+    #     shell=False,
+    #     output="screen",
+    # )
     
-    load_diff_drive_controller = ExecuteProcess(
-        name="activate_diff_drive_base_controller",
-        cmd=[
-            "ros2",
-            "control",
-            "load_controller",
-            "--set-state", "active",
-            "-c", "pippo/controller_manager",
-            "pippo_diff_drive_controller",
-        ],
-        shell=False,
+    # load_diff_drive_controller = ExecuteProcess(
+    #     name="activate_diff_drive_base_controller",
+    #     cmd=[
+    #         "ros2",
+    #         "control",
+    #         "load_controller",
+    #         "--set-state", "active",
+    #         "-c", "pippo/controller_manager",
+    #         "pippo_diff_drive_controller",
+    #     ],
+    #     shell=False,
+    #     output="screen",
+    # )
+
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        namespace="pippo",
+        name="rviz2",
+        # remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
         output="screen",
+        arguments=["-d", os.path.join(pkg_simulation, "rviz/simulation.rviz")],
     )
 
     return LaunchDescription([
+        # gazebo,
         launch_arm,
         robot_state_publisher,
         spawn_entity,
-        # robot_localization_node
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=spawn_entity,
-                on_exit=[load_joint_state_controller],
-            )
-        ),
-        RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=load_joint_state_controller,
-                on_exit=[load_diff_drive_controller],
-            )
-        ),
+        # RegisterEventHandler(
+        #     event_handler=OnProcessExit(
+        #         target_action=spawn_entity,
+        #         on_exit=[load_joint_state_controller],
+        #     )
+        # ),
+        # RegisterEventHandler(
+        #     event_handler=OnProcessExit(
+        #         target_action=load_joint_state_controller,
+        #         on_exit=[load_diff_drive_controller],
+        #     )
+        # ),
+        rviz
     ])
