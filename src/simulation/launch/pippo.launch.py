@@ -16,10 +16,11 @@ def generate_launch_description():
     pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
     pkg_arm = get_package_share_directory('irb1200_ros2_gazebo')
+    # pkg_amazon = get_package_share_directory('custom_robots')
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': os.path.join(pkg_simulation, 'worlds', 'irb1200.world')}.items(),
+        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb1200.world')}.items(),
     )
 
     launch_arm = IncludeLaunchDescription(
@@ -27,11 +28,37 @@ def generate_launch_description():
             os.path.join(pkg_arm, 'launch', 'irb1200_simulation.launch.py'),
         )
     )
+
+    # launch_amazon_robot = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         os.path.join(pkg_amazon, 'launch', 'spawn_amazon_model.launch.py')
+    #     )
+    # )
+
+    # amazon_state_publisher = Node(
+    #     package="robot_state_publisher",
+    #     executable="robot_state_publisher",
+    #     parameters=[
+    #         {"robot_description": Command(["xacro ", os.path.join(pkg_amazon, "urdf/amazon_robot.urdf")])}
+    #     ],
+    # )
+
+    # amazon_joint_state_publisher = Node(
+    #     package='joint_state_publisher',
+    #     executable='joint_state_publisher',
+    #     name='joint_state_publisher'
+    # )
+
+    # spawn_amazon_robot = Node(
+    #     package='gazebo_ros',
+    #     executable='spawn_entity.py',
+    #     arguments=['-entity', 'amazon_robot', '-topic', '/robot_description', '-y', '5'],
+    #     output='screen'
+    # )
     
-    robot_state_publisher = Node(
+    pippo_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        # name="pippo_state_publisher",
         namespace="pippo",
         # remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
         parameters=[
@@ -39,40 +66,12 @@ def generate_launch_description():
         ],
     )
 
-    spawn_entity = Node(
+    spawn_pippo = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'dolly', '-topic', '/pippo/robot_description', '-x', '5'],
+        arguments=['-entity', 'dolly', '-topic', '/pippo/robot_description', '-x', '-5'],
         output='screen'
     )
-    
-    # load_joint_state_controller = ExecuteProcess(
-    #     name="activate_joint_state_broadcaster",
-    #     cmd=[
-    #         "ros2",
-    #         "control",
-    #         "load_controller",
-    #         "--set-state", "active",
-    #         "-c", "pippo/controller_manager",
-    #         "pippo_joint_state_broadcaster",
-    #     ],
-    #     shell=False,
-    #     output="screen",
-    # )
-    
-    # load_diff_drive_controller = ExecuteProcess(
-    #     name="activate_diff_drive_base_controller",
-    #     cmd=[
-    #         "ros2",
-    #         "control",
-    #         "load_controller",
-    #         "--set-state", "active",
-    #         "-c", "pippo/controller_manager",
-    #         "pippo_diff_drive_controller",
-    #     ],
-    #     shell=False,
-    #     output="screen",
-    # )
 
     rviz = Node(
         package="rviz2",
@@ -87,19 +86,11 @@ def generate_launch_description():
     return LaunchDescription([
         # gazebo,
         launch_arm,
-        robot_state_publisher,
-        spawn_entity,
-        # RegisterEventHandler(
-        #     event_handler=OnProcessExit(
-        #         target_action=spawn_entity,
-        #         on_exit=[load_joint_state_controller],
-        #     )
-        # ),
-        # RegisterEventHandler(
-        #     event_handler=OnProcessExit(
-        #         target_action=load_joint_state_controller,
-        #         on_exit=[load_diff_drive_controller],
-        #     )
-        # ),
+        # launch_amazon_robot,
+        # amazon_state_publisher,
+        # amazon_joint_state_publisher,
+        # spawn_amazon_robot,
+        pippo_state_publisher,
+        spawn_pippo,
         rviz
     ])

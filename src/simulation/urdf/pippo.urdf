@@ -59,6 +59,74 @@
     <xacro:box_inertia m="1" w="${base_width}" d="${base_length}" h="${base_height}"/>
   </link>
 
+  <!-- Platform -->
+  <link name="platform_link">
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+
+    <visual>
+      <geometry>
+        <box size="0.40 0.40 0.01" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.40 0.40 0.01" />
+      </geometry>
+    </collision>
+    
+    <inertial>
+      <mass value="1"/>
+      <inertia
+              ixx="1.0" ixy="0.0" ixz="0.0"
+              iyy="1.0" iyz="0.0"
+              izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="platform_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0. 0. 0."/>
+    <parent link="pippo/lidar_link" />
+    <child link="platform_link" />
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
+  </joint>
+
+  <link name="box_link">
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+
+    <visual>
+      <geometry>
+        <box size="0.15 0.15 0.15" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="0.15 0.15 0.15" />
+      </geometry>
+    </collision>
+
+    <inertial>
+      <mass value="1"/>
+      <inertia
+              ixx="1.0" ixy="0.0" ixz="0.0"
+              iyy="1.0" iyz="0.0"
+              izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="box_joint" type="floating">
+    <origin xyz="0 0 0.5" rpy="0. 0. 0."/>
+    <parent link="platform_link" />
+    <child link="box_link" />
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
+  </joint>
+
+
   <!-- Robot Footprint -->
   <link name="pippo/base_footprint">
     <xacro:box_inertia m="0" w="0" d="0" h="0"/>
@@ -138,7 +206,7 @@
         <update_rate>25.0</update_rate>
         <visualize>true</visualize>
         <topic>/pippo/gps/fix</topic>
-        <!-- <ignition_frame_id>/pippo/gnss_link</ignition_frame_id> -->
+        <ignition_frame_id>/pippo/gnss_link</ignition_frame_id>
     </sensor>
   </gazebo>
 
@@ -165,69 +233,30 @@
   </joint>
 
   <gazebo reference="pippo/imu_link">
-    <sensor name="imu_sensor" type="imu">
-      <ignition_frame_id>/pippo/imu_link</ignition_frame_id>
-      <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
-      </plugin>
+    <gravity>true</gravity>
 
-      <topic>/pippo/imu</topic>
+    <sensor name="imu_sensor" type="imu">
       <always_on>true</always_on>
       <update_rate>100</update_rate>
       <visualize>true</visualize>
-      <imu>
-        <angular_velocity>
-          <x>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </z>
-        </angular_velocity>
-        <linear_acceleration>
-          <x>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>1.7e-2</stddev>
-              <bias_mean>0.1</bias_mean>
-              <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </z>
-        </linear_acceleration>
-      </imu>
+    
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <ros>
+          <namespace>/pippo</namespace>
+          <remapping>~/out:=imu</remapping> <!-- This is the topic (/pippo/imu) -->
+        </ros>
+
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>100.0</updateRateHZ>
+
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+
+      <pose>0 0 0 0 0 0</pose>
     </sensor>
   </gazebo>
 
@@ -264,8 +293,6 @@
 
   <gazebo reference="pippo/lidar_link">
     <sensor name="lidar" type="ray">
-      <!-- <ignition_frame_id>pippo/lidar_link</ignition_frame_id> -->
-      <!-- <topic>/pippo/scan</topic> -->
       <always_on>true</always_on>
       <visualize>true</visualize>
       <update_rate>100.0</update_rate>
@@ -287,7 +314,7 @@
       <plugin name="laser" filename="libgazebo_ros_ray_sensor.so">
         <ros>
           <namespace>/pippo</namespace>
-          <remapping>~/out:=scan</remapping>
+          <remapping>~/out:=scan</remapping> <!-- This is the topic (/pippo/scan) -->
         </ros>
         <output_type>sensor_msgs/LaserScan</output_type>
       </plugin>
@@ -319,11 +346,42 @@
       <!-- output -->
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
-      <publish_wheel_tf>false</publish_wheel_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
 
       <odometry_topic>odom</odometry_topic>
-      <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>base_link</robot_base_frame>
+      <odometry_frame>world</odometry_frame>
+      <robot_base_frame>pippo/base_link</robot_base_frame>
+    </plugin>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="diff_drive_rear" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+          <namespace>/pippo</namespace>
+      </ros>
+
+      <update_rate>30</update_rate>
+
+      <!-- wheels -->
+      <left_joint>pippo_drivewhl_l_rear_joint</left_joint>
+      <right_joint>pippo_drivewhl_r_rear_joint</right_joint>
+
+      <!-- kinematics -->
+      <wheel_separation>0.5</wheel_separation>
+      <wheel_diameter>0.1</wheel_diameter>
+
+      <!-- limits -->
+      <max_wheel_torque>20</max_wheel_torque>
+      <max_wheel_acceleration>1.0</max_wheel_acceleration>
+
+      <command_topic>cmd_vel</command_topic>
+
+      <!-- output -->
+      <publish_odom>false</publish_odom>
+      <publish_odom_tf>false</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+
+      <robot_base_frame>pippo/base_link</robot_base_frame>
     </plugin>
   </gazebo>
 </robot>
