@@ -15,7 +15,7 @@ def generate_launch_description():
 
     pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
-    pkg_arm = get_package_share_directory('irb1200_ros2_gazebo')
+    pkg_arm = get_package_share_directory('irb120_ros2_moveit2')
     # pkg_amazon = get_package_share_directory('custom_robots')
 
     gazebo = IncludeLaunchDescription(
@@ -25,7 +25,7 @@ def generate_launch_description():
 
     launch_arm = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_arm, 'launch', 'irb1200_simulation.launch.py'),
+            os.path.join(pkg_arm, 'launch', 'irb120_interface.launch.py'),
         )
     )
 

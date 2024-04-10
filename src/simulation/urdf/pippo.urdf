@@ -93,7 +93,7 @@
     <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
   </joint>
 
-  <link name="box_link">
+  <!-- <link name="box_link">
     <origin xyz="0 0 0.5" rpy="0 0 0"/>
 
     <visual>
@@ -124,7 +124,7 @@
     <child link="box_link" />
     <axis xyz="0 0 1" rpy="0 0 0"/>
     <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
-  </joint>
+  </joint> -->
 
 
   <!-- Robot Footprint -->
