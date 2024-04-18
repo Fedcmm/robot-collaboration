@@ -4,6 +4,8 @@
 
 `ros2 run ros2_grasping spawn_object.py --package "ros2_grasping" --urdf "---" --name "---" --x 0.0 --y -0.0 --z 0.0`
 
+The parameter *name* is the name of the object declared in the urdf file.
+
 ### Run program
 
 `ros2 run ros2_execution ros2_execution.py --ros-args -p PROGRAM_FILENAME:="---" -p ROBOT_MODEL:="---" -p EE_MODEL:="---"'`
@@ -27,3 +29,12 @@ The robot model name is "*irb120*" and the ee (end effector) model is "*schunk*"
 * For the ros2_grasping feature:
     * To attach object to end-effector ---> {'action': 'Attach', 'value': {'object': '---', 'endeffector': '---'}}
     * To detach object ---> {'action': 'Detach', 'value': {'object': '---'}}
+
+
+## Movement types
+
+### MoveL
+
+Moves the gripper part of the arm by a vector, so the whole arm moves to make the gripper cover the specified distance.
+
+The components of the movement (x, y, z) are numbers from -1.0 to 1.0. They are relative to the maximum possible movement in that direction (front/back, left/right and up/down respectively), so if the arm is at the initial position, the allowed movement is 0.5 in every direction except down. This is because the joints of the arm would have bend more than they can; some movements are in fact not allowed depending on the current position of the arm.
