@@ -649,7 +649,7 @@ class CloseProgram():
         print("Please execute the program and input all ROS2 parameters in the Ubuntu Terminal as stated below:")
         print('COMMAND -> ros2 run ros2_execution ros2_execution.py --ros-args -p PROGRAM_FILENAME:="---" -p ROBOT_MODEL:="---" -p EE_MODEL:="---"')
         print("Closing... BYE!")
-        time.sleep(5)
+        time.sleep(2)
         exit()
 
 # ==================================================================================================================================== #
@@ -751,7 +751,7 @@ def main(args=None):
         nodeLOG.get_logger().info("ERROR: " + PR_NAME + " file (program) not found. Please try again.")
         print('COMMAND -> ros2 run ros2_execution ros2_execution.py --ros-args -p PROGRAM_FILENAME:="---" -p ROBOT_MODEL:="---" -p EE_MODEL:="---"')
         print("Closing... BYE!")
-        time.sleep(5)
+        time.sleep(2)
         exit()
 
     # OPEN PR_NAME.txt FILE:
@@ -1244,7 +1244,7 @@ def main(args=None):
     nodeLOG.get_logger().info("SUCESS: Program execution sucessfully finished.")
     nodeLOG.destroy_node()
     print("Closing... BYE!")
-    time.sleep(5)
+    time.sleep(2)
         
 
 if __name__ == '__main__':

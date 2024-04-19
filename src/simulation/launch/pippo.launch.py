@@ -2,7 +2,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import Condition, LaunchDescription
-from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, ExecuteProcess, RegisterEventHandler)
+from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.substitutions import (
@@ -13,48 +13,21 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
 
-    pkg_gazebo = get_package_share_directory('gazebo_ros')
+    # pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
     pkg_arm = get_package_share_directory('irb120_ros2_moveit2')
     # pkg_amazon = get_package_share_directory('custom_robots')
 
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb1200.world')}.items(),
-    )
+    # gazebo = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
+    #     launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world')}.items(),
+    # )
 
     launch_arm = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_arm, 'launch', 'irb120_interface.launch.py'),
         )
     )
-
-    # launch_amazon_robot = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource(
-    #         os.path.join(pkg_amazon, 'launch', 'spawn_amazon_model.launch.py')
-    #     )
-    # )
-
-    # amazon_state_publisher = Node(
-    #     package="robot_state_publisher",
-    #     executable="robot_state_publisher",
-    #     parameters=[
-    #         {"robot_description": Command(["xacro ", os.path.join(pkg_amazon, "urdf/amazon_robot.urdf")])}
-    #     ],
-    # )
-
-    # amazon_joint_state_publisher = Node(
-    #     package='joint_state_publisher',
-    #     executable='joint_state_publisher',
-    #     name='joint_state_publisher'
-    # )
-
-    # spawn_amazon_robot = Node(
-    #     package='gazebo_ros',
-    #     executable='spawn_entity.py',
-    #     arguments=['-entity', 'amazon_robot', '-topic', '/robot_description', '-y', '5'],
-    #     output='screen'
-    # )
     
     pippo_state_publisher = Node(
         package="robot_state_publisher",
@@ -86,10 +59,6 @@ def generate_launch_description():
     return LaunchDescription([
         # gazebo,
         launch_arm,
-        # launch_amazon_robot,
-        # amazon_state_publisher,
-        # amazon_joint_state_publisher,
-        # spawn_amazon_robot,
         pippo_state_publisher,
         spawn_pippo,
         rviz
