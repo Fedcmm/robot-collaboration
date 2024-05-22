@@ -42,7 +42,7 @@ def generate_launch_description():
     spawn_pippo = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'dolly', '-topic', '/pippo/robot_description', '-x', '-5'],
+        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-5'],
         output='screen'
     )
 

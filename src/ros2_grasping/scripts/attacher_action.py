@@ -252,7 +252,7 @@ class GraspingActionServer(Node):
                 break
         return(response.state)
 
-    # GET pose of object:
+    # SET pose of object:
     def SetPose(self, state):
         NodeSET = serviceClientSET()
         NodeSET.SET(state)

@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/gazebo-11",
+                "/usr/include/gz/**",
+                "/usr/include/ignition/**",
+                "/usr/include/sdformat-9.7",
+                "/opt/ros/humble/include/**",
+                "${workspaceFolder}/src/polygon_base/include",
+                "/usr/include/gz/math7",
+                "${workspaceFolder}/src/join_plugins/include",
+                "/opt/ros/humble/include/pluginlib",
+                "/opt/ros/humble/include/class_loader",
+                "${workspaceFolder}/src/join_base/include",
+                "/usr/include/gz/utils2",
+                "/opt/ros/humble/include/rcpputils",
+                "/opt/ros/humble/include/rcutils",
+                "/usr/include/ignition/common3"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

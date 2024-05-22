@@ -2,7 +2,7 @@
 
 ### Spawn object
 
-`ros2 run ros2_grasping spawn_object.py --package "ros2_grasping" --urdf "---" --name "---" --x 0.0 --y -0.0 --z 0.0`
+`ros2 run gazebo_ros spawn_entity.py -file "src/ros2_grasping/urdf/box.urdf" -entity "---" -x 0.0 -y -0.0`
 
 The parameter *name* is the name of the object declared in the urdf file. The file must be located in a folder named "urdf" in the specified package.
 

@@ -8,9 +8,14 @@
         <box size= "0.04 0.04 0.08" />
       </geometry>
       <surface>
-        <contact>
+        <contact_coefficients mu="1.0" kp="1.0" kd="1.0"/>
+        <!-- <contact>
           <collide_without_contact>false</collide_without_contact>
         </contact>
+        <friction>
+          <mu>100.0</mu>
+          <mu2>100.0</mu2>
+        </friction> -->
       </surface>
     </collision>
 
@@ -25,16 +30,16 @@
       <origin xyz= "0.0 0.0 0.0" rpy="0 0 0"/>
       <mass value= "0.1" />
       <inertia
-        ixx="0.15" ixy="0.0"  ixz="0.0"
-        iyy="0.15" iyz="0.0"
-        izz="0.15" />
+        ixx="1.0" ixy="0.0"  ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0" />
     </inertial>
   </link>
 
   <gazebo reference="box">
     <material>Gazebo/Red</material>
-    <mu1>0.0</mu1>
-    <mu2>0.0</mu2>
+    <!-- <mu1>0.0</mu1>
+    <mu2>0.0</mu2> -->
     <selfCollide>false</selfCollide>
   </gazebo>
 
