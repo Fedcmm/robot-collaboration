@@ -56,55 +56,17 @@
       </geometry>
     </collision>
 
+    <!-- <xacro:box_inertia m="1" w="${base_width}" d="${base_length}" h="${base_height}"/> -->
+  </link>
+
+  <!-- <link name="pippo/base_inertia_link">
     <xacro:box_inertia m="1" w="${base_width}" d="${base_length}" h="${base_height}"/>
-  </link>
-
-  <!-- Platform -->
-  <link name="pippo/platform_link">
-    <origin xyz="0 0 0.05" rpy="0 0 0"/>
-
-    <visual>
-      <geometry>
-        <box size="0.40 0.40 0.01" />
-      </geometry>
-      <material name="DarkBlue">
-        <color rgba="0.09 0.30 0.46 1.0"/>
-      </material>
-    </visual>
-
-    <collision>
-      <geometry>
-        <box size="0.40 0.40 0.01" />
-      </geometry>
-      <contact_coefficients mu="1.0" kp="1.0" kd="1.0"/>
-      <!-- <surface>
-        <friction>
-          <mu>100.0</mu>
-          <mu2>100.0</mu2>
-        </friction>
-      </surface> -->
-    </collision>
-    
-    <inertial>
-      <mass value="1"/>
-      <inertia
-              ixx="1.0" ixy="0.0" ixz="0.0"
-              iyy="1.0" iyz="0.0"
-              izz="1.0"/>
-    </inertial>
-  </link>
-
-  <joint name="platform_joint" type="fixed">
-    <origin xyz="0 0 0.05" rpy="0. 0. 0."/>
-    <parent link="pippo/lidar_link" />
-    <child link="pippo/platform_link" />
-    <axis xyz="0 0 1" rpy="0 0 0"/>
-    <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
-  </joint>
+  </link> -->
 
   <!-- Robot Footprint -->
   <link name="pippo/base_footprint">
-    <xacro:box_inertia m="0" w="0" d="0" h="0"/>
+    <xacro:box_inertia m="1" w="${base_width}" d="${base_length}" h="${base_height}"/>
+    <!-- <xacro:box_inertia m="0" w="0" d="0" h="0"/> -->
   </link>
 
   <joint name="base_joint" type="fixed">
@@ -236,19 +198,6 @@
   </gazebo>
 
   <link name="pippo/lidar_link">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.125"/>
-      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
-    </inertial>
-
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-        <cylinder radius="0.0508" length="0.055"/>
-      </geometry>
-    </collision>
-
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -258,13 +207,113 @@
         <color rgba="0.11 0.37 0.56 1.0"/>
       </material>
     </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.0508" length="0.055"/>
+      </geometry>
+    </collision>
+    
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.125"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
   </link>
 
   <joint name="lidar_joint" type="fixed">
     <parent link="pippo/base_link"/>
     <child link="pippo/lidar_link"/>
     <origin xyz="0 0 0.12" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.2"/>
   </joint>
+
+  <gazebo reference="lidar_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>S
+  </gazebo>
+
+  <!-- Platform -->
+  <link name="pippo/platform_link">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.40 0.40 0.01" />
+      </geometry>
+      <material name="DarkBlue">
+        <color rgba="0.09 0.30 0.46 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.40 0.40 0.01" />
+      </geometry>
+    </collision>
+    
+    <inertial>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <mass value="0.125"/>
+      <inertia
+              ixx="1.0" ixy="0.0" ixz="0.0"
+              iyy="1.0" iyz="0.0"
+              izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="platform_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0. 0. 0."/>
+    <parent link="pippo/lidar_link" />
+    <child link="pippo/platform_link" />
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
+  </joint>
+
+  <gazebo reference="platform_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- <link name="box">
+    <collision>
+      <origin xyz= "0.0 0.0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <box size= "0.04 0.04 0.08" />
+      </geometry>
+      <surface>
+        <contact_coefficients mu="1.0" kp="1.0" kd="1.0"/>
+      </surface>
+    </collision>
+
+    <visual>
+      <origin xyz= "0.0 0.0 1.0" rpy="0 0 0"/>
+      <geometry>
+        <box size= "0.04 0.04 0.08" />
+      </geometry>
+    </visual>
+
+    <inertial>
+      <origin xyz= "0.0 0.0 1.0" rpy="0 0 0"/>
+      <mass value= "0.1" />
+      <inertia
+        ixx="1.0" ixy="0.0"  ixz="0.0"
+        iyy="1.0" iyz="0.0"
+        izz="1.0" />
+    </inertial>
+  </link>
+
+  <joint name="box_joint" type="floating">
+    <origin xyz="0 0 0.05" rpy="0. 0. 0."/>
+    <parent link="pippo/platform_link" />
+    <child link="box" />
+    <axis xyz="0 0 1" rpy="0 0 0"/>
+    <limit effort="10000.0" lower="-0.05" upper="0.24" velocity="0.5"/>
+  </joint>
+
+  <gazebo reference="box">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo> -->
 
   <gazebo reference="pippo/lidar_link">
     <sensor name="lidar" type="ray">
@@ -294,6 +343,10 @@
         <output_type>sensor_msgs/LaserScan</output_type>
       </plugin>
     </sensor>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="join_plugin" filename="libjoin_plugin.so"/>
   </gazebo>
   
   <gazebo>

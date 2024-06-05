@@ -50,6 +50,9 @@
     <!-- GAZEBO PLUGINS: -->
     <!-- The following plugins must be activated for the ros2_grasping to effectively work: -->
 
+    <!-- <plugin name="join_plugin" filename="libjoin_plugin.so"></plugin> -->
+    <!-- <plugin name="polygon_plugins" filename="libpolygon_plugins.so"></plugin> -->
+
     <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
       <ros>
         <namespace>/ros2_grasp</namespace>
@@ -64,8 +67,6 @@
         <namespace>/ros2_grasp</namespace>
       </ros>
     </plugin>
-
-    <plugin name="polygon_plugins" filename="libpolygon_plugins.so"></plugin>
 
   </world>
 </sdf>

@@ -2,7 +2,7 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import Condition, LaunchDescription
-from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription)
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch.substitutions import (
@@ -13,15 +13,16 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
 
-    # pkg_gazebo = get_package_share_directory('gazebo_ros')
+    pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
     pkg_arm = get_package_share_directory('irb120_ros2_moveit2')
-    # pkg_amazon = get_package_share_directory('custom_robots')
 
-    # gazebo = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
-    #     launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world')}.items(),
-    # )
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
+        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world'), 
+                        #   'launch-prefix': 'gdbserver localhost:3000'
+                          }.items(),
+    )
 
     launch_arm = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -42,7 +43,7 @@ def generate_launch_description():
     spawn_pippo = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-5'],
+        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-0.2', '-y', '-0.5'],
         output='screen'
     )
 
