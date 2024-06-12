@@ -1,14 +1,11 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch import Condition, LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
-from launch.substitutions import (
-    Command,
-    LaunchConfiguration,
-)
+from launch.substitutions import Command, LaunchConfiguration
 from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
@@ -19,9 +16,7 @@ def generate_launch_description():
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world'), 
-                        #   'launch-prefix': 'gdbserver localhost:3000'
-                          }.items(),
+        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world')}.items(),
     )
 
     launch_arm = IncludeLaunchDescription(
@@ -34,7 +29,6 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         namespace="pippo",
-        # remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
         parameters=[
             {"robot_description": Command(["xacro ", os.path.join(pkg_simulation, "urdf/pippo.urdf")])}
         ],
@@ -43,7 +37,7 @@ def generate_launch_description():
     spawn_pippo = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-0.2', '-y', '-0.5'],
+        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-0.0', '-y', '-0.5'],
         output='screen'
     )
 
@@ -52,7 +46,6 @@ def generate_launch_description():
         executable="rviz2",
         namespace="pippo",
         name="rviz2",
-        # remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
         output="screen",
         arguments=["-d", os.path.join(pkg_simulation, "rviz/simulation.rviz")],
     )
