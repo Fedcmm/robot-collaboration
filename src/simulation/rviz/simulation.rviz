@@ -75,7 +75,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /pippo/scan
+        Value: /robot/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -106,23 +106,23 @@ Visualization Manager:
           Value: true
         link_6:
           Value: true
-        pippo/base_footprint:
+        robot/base_footprint:
           Value: true
-        pippo/base_link:
+        robot/base_link:
           Value: true
-        pippo/drivewhl_l_front_link:
+        robot/drivewhl_l_front_link:
           Value: true
-        pippo/drivewhl_l_rear_link:
+        robot/drivewhl_l_rear_link:
           Value: true
-        pippo/drivewhl_r_front_link:
+        robot/drivewhl_r_front_link:
           Value: true
-        pippo/drivewhl_r_rear_link:
+        robot/drivewhl_r_rear_link:
           Value: true
-        pippo/gnss_link:
+        robot/gnss_link:
           Value: true
-        pippo/imu_link:
+        robot/imu_link:
           Value: true
-        pippo/lidar_link:
+        robot/lidar_link:
           Value: true
         table:
           Value: true
@@ -136,22 +136,22 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        pippo/base_link:
-          pippo/base_footprint:
+        robot/base_link:
+          robot/base_footprint:
             {}
-          pippo/drivewhl_l_front_link:
+          robot/drivewhl_l_front_link:
             {}
-          pippo/drivewhl_l_rear_link:
+          robot/drivewhl_l_rear_link:
             {}
-          pippo/drivewhl_r_front_link:
+          robot/drivewhl_r_front_link:
             {}
-          pippo/drivewhl_r_rear_link:
+          robot/drivewhl_r_rear_link:
             {}
-          pippo/gnss_link:
+          robot/gnss_link:
             {}
-          pippo/imu_link:
+          robot/imu_link:
             {}
-          pippo/lidar_link:
+          robot/lidar_link:
             lift_link:
               {}
         world:
@@ -182,7 +182,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /pippo/robot_description
+        Value: /robot/robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -195,46 +195,46 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/base_footprint:
+        robot/base_footprint:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        pippo/base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        pippo/drivewhl_l_front_link:
+        robot/base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/drivewhl_l_rear_link:
+        robot/drivewhl_l_front_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/drivewhl_r_front_link:
+        robot/drivewhl_l_rear_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/drivewhl_r_rear_link:
+        robot/drivewhl_r_front_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/gnss_link:
+        robot/drivewhl_r_rear_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/imu_link:
+        robot/gnss_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pippo/lidar_link:
+        robot/imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        robot/lidar_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false

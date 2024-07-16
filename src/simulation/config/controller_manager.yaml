@@ -1,21 +1,21 @@
-pippo/controller_manager:
+robot/controller_manager:
   ros__parameters:
     update_rate: 25  # Hz
 
-    pippo_joint_state_broadcaster:
+    robot_joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    pippo_diff_drive_controller:
+    robot_diff_drive_controller:
       type: diff_drive_controller/DiffDriveController
 
-pippo/pippo_joint_state_broadcaster:
+robot/robot_joint_state_broadcaster:
   ros__parameters:
     use_local_topic: true
 
-pippo/pippo_diff_drive_controller:
+robot/robot_diff_drive_controller:
   ros__parameters:
-    left_wheel_names: ["pippo_drivewhl_l_front_joint", "pippo_drivewhl_l_rear_joint"]
-    right_wheel_names: ["pippo_drivewhl_r_front_joint", "pippo_drivewhl_r_rear_joint"]
+    left_wheel_names: ["robot_drivewhl_l_front_joint", "robot_drivewhl_l_rear_joint"]
+    right_wheel_names: ["robot_drivewhl_r_front_joint", "robot_drivewhl_r_rear_joint"]
 
     wheel_separation: 0.4
     wheels_per_side: 1  # actually 2, but both are controlled by 1 signal
@@ -28,7 +28,7 @@ pippo/pippo_diff_drive_controller:
     publish_rate: 50.0
     tf_frame_prefix_enable: false
     odom_frame_id: world
-    base_frame_id: pippo/base_link
+    base_frame_id: robot/base_link
     pose_covariance_diagonal : [0.001, 0.001, 0.0, 0.0, 0.0, 0.01]
     twist_covariance_diagonal: [0.001, 0.0, 0.0, 0.0, 0.0, 0.01]
 

@@ -80,7 +80,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-                launch_arguments={'world': irb120_ros2_gazebo}.items(),
+                launch_arguments={'world': irb120_ros2_gazebo, 'gui': 'false'}.items(),
              )
 
     # ***** COMMAND LINE ARGUMENTS ***** #

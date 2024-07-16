@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="pippo"
+<robot name="robot"
   xmlns:xacro="http://ros.org/wiki/xacro">
 
   <!-- Define robot constants -->
@@ -40,7 +40,7 @@
   </xacro:macro>
 
   <!-- Robot Base -->
-  <link name="pippo/base_link">
+  <link name="robot/base_link">
     <visual>
       <geometry>
         <box size="${base_length} ${base_width} ${base_height}"/>
@@ -59,19 +59,19 @@
   </link>
 
   <!-- Robot Footprint -->
-  <link name="pippo/base_footprint">
+  <link name="robot/base_footprint">
     <xacro:box_inertia m="1" w="${base_width}" d="${base_length}" h="${base_height}"/>
   </link>
 
   <joint name="base_joint" type="fixed">
-    <parent link="pippo/base_link"/>
-    <child link="pippo/base_footprint"/>
+    <parent link="robot/base_link"/>
+    <child link="robot/base_footprint"/>
     <origin xyz="0.0 0.0 ${-(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
   </joint>
 
   <!-- Wheels -->
   <xacro:macro name="wheel" params="prefix x_reflect y_reflect">
-    <link name="pippo/${prefix}_link">
+    <link name="robot/${prefix}_link">
       <visual>
         <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
         <geometry>
@@ -92,9 +92,9 @@
       <xacro:cylinder_inertia m="2.5" r="${wheel_radius}" h="${wheel_width}"/>
     </link>
 
-    <joint name="pippo_${prefix}_joint" type="continuous">
-      <parent link="pippo/base_link"/>
-      <child link="pippo/${prefix}_link"/>
+    <joint name="robot_${prefix}_joint" type="continuous">
+      <parent link="robot/base_link"/>
+      <child link="robot/${prefix}_link"/>
       <origin xyz="${x_reflect*wheel_xoff} ${y_reflect*(base_width/2+wheel_ygap)} ${-wheel_zoff}" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
       <dynamics damping="0.2"/>
@@ -126,7 +126,7 @@
   </link>
 
   <joint name="caster_joint" type="continuous">
-    <parent link="pippo/base_link"/>
+    <parent link="robot/base_link"/>
     <child link="caster_link"/>
     <axis xyz="1 1 0"/>
     <origin xyz="0.12 0 -0.105" rpy="0 0 0"/>
@@ -136,7 +136,7 @@
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
 
-  <link name="pippo/gnss_link">
+  <link name="robot/gnss_link">
     <collision>
         <geometry>
             <sphere radius="0.05"/>
@@ -157,21 +157,21 @@
 
   <joint name="gnss_joint" type="fixed">
     <origin xyz="0 0 -0.05" rpy="0 0 0"/>
-    <parent link="pippo/base_link"/>
-    <child link="pippo/gnss_link"/>
+    <parent link="robot/base_link"/>
+    <child link="robot/gnss_link"/>
   </joint>
 
-  <gazebo reference="pippo/gnss_link">
+  <gazebo reference="robot/gnss_link">
     <sensor name="GazeboNavSat" type="navsat">
         <always_on>1</always_on>
         <update_rate>25.0</update_rate>
         <visualize>true</visualize>
-        <topic>/pippo/gps/fix</topic>
-        <ignition_frame_id>/pippo/gnss_link</ignition_frame_id>
+        <topic>/robot/gps/fix</topic>
+        <ignition_frame_id>/robot/gnss_link</ignition_frame_id>
     </sensor>
   </gazebo>
 
-  <link name="pippo/imu_link">
+  <link name="robot/imu_link">
     <visual>
       <geometry>
         <box size="0.1 0.1 0.1"/>
@@ -188,12 +188,12 @@
   </link>
 
   <joint name="imu_joint" type="fixed">
-    <parent link="pippo/base_link"/>
-    <child link="pippo/imu_link"/>
+    <parent link="robot/base_link"/>
+    <child link="robot/imu_link"/>
     <origin xyz="0 0 0.01"/>
   </joint>
 
-  <gazebo reference="pippo/imu_link">
+  <gazebo reference="robot/imu_link">
     <gravity>true</gravity>
 
     <sensor name="imu_sensor" type="imu">
@@ -203,8 +203,8 @@
     
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
         <ros>
-          <namespace>/pippo</namespace>
-          <remapping>~/out:=imu</remapping> <!-- This is the topic (/pippo/imu) -->
+          <namespace>/robot</namespace>
+          <remapping>~/out:=imu</remapping> <!-- This is the topic (/robot/imu) -->
         </ros>
 
         <bodyName>imu_link</bodyName>
@@ -221,7 +221,7 @@
     </sensor>
   </gazebo>
 
-  <link name="pippo/lidar_link">
+  <link name="robot/lidar_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
@@ -247,8 +247,8 @@
   </link>
 
   <joint name="lidar_joint" type="fixed">
-    <parent link="pippo/base_link"/>
-    <child link="pippo/lidar_link"/>
+    <parent link="robot/base_link"/>
+    <child link="robot/lidar_link"/>
     <origin xyz="0 0 0.12" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <dynamics damping="0.2"/>
@@ -259,7 +259,7 @@
   </gazebo>
 
   <!-- Platform -->
-  <link name="pippo/platform_link">
+  <link name="robot/platform_link">
     <visual>
       <origin xyz="0 0 0.015" rpy="0 0 0"/>
       <geometry>
@@ -289,15 +289,15 @@
 
   <joint name="platform_joint" type="fixed">
     <origin xyz="0 0 0.015" rpy="0. 0. 0."/>
-    <parent link="pippo/lidar_link" />
-    <child link="pippo/platform_link" />
+    <parent link="robot/lidar_link" />
+    <child link="robot/platform_link" />
   </joint>
 
   <gazebo reference="platform_joint">
     <preserveFixedJoint>true</preserveFixedJoint>
   </gazebo>
 
-  <gazebo reference="pippo/lidar_link">
+  <gazebo reference="robot/lidar_link">
     <sensor name="lidar" type="ray">
       <always_on>true</always_on>
       <visualize>true</visualize>
@@ -319,8 +319,8 @@
 
       <plugin name="laser" filename="libgazebo_ros_ray_sensor.so">
         <ros>
-          <namespace>/pippo</namespace>
-          <remapping>~/out:=scan</remapping> <!-- This is the topic (/pippo/scan) -->
+          <namespace>/robot</namespace>
+          <remapping>~/out:=scan</remapping> <!-- This is the topic (/robot/scan) -->
         </ros>
         <output_type>sensor_msgs/LaserScan</output_type>
       </plugin>
@@ -334,14 +334,14 @@
   <gazebo>
     <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
       <ros>
-          <namespace>/pippo</namespace>
+          <namespace>/robot</namespace>
       </ros>
 
       <update_rate>30</update_rate>
 
       <!-- wheels -->
-      <left_joint>pippo_drivewhl_l_front_joint</left_joint>
-      <right_joint>pippo_drivewhl_r_front_joint</right_joint>
+      <left_joint>robot_drivewhl_l_front_joint</left_joint>
+      <right_joint>robot_drivewhl_r_front_joint</right_joint>
 
       <!-- kinematics -->
       <wheel_separation>0.5</wheel_separation>
@@ -360,7 +360,7 @@
 
       <odometry_topic>odom</odometry_topic>
       <odometry_frame>world</odometry_frame>
-      <robot_base_frame>pippo/base_link</robot_base_frame>
+      <robot_base_frame>robot/base_link</robot_base_frame>
     </plugin>
   </gazebo>
 </robot>

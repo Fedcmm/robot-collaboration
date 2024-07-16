@@ -13,10 +13,10 @@ build_debug: src
 	@echo 'REMEMBER TO RUN ". install/setup.bash"'
 
 run: install
-	ros2 launch simulation pippo.launch.py
+	ros2 launch simulation robot.launch.py
 
 debug: install
-	ros2 launch simulation pippo.launch.py
+	ros2 launch simulation robot.launch.py
 
 clean:
 	rm -rf build/ install log

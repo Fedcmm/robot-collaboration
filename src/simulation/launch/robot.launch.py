@@ -10,14 +10,8 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
 
-    pkg_gazebo = get_package_share_directory('gazebo_ros')
     pkg_simulation = get_package_share_directory('simulation')
     pkg_arm = get_package_share_directory('irb120_ros2_moveit2')
-
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(pkg_gazebo, 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': os.path.join(pkg_arm, 'worlds', 'irb120.world')}.items(),
-    )
 
     launch_arm = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -25,35 +19,34 @@ def generate_launch_description():
         )
     )
     
-    pippo_state_publisher = Node(
+    robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        namespace="pippo",
+        namespace="robot",
         parameters=[
-            {"robot_description": Command(["xacro ", os.path.join(pkg_simulation, "urdf/pippo.urdf")])}
+            {"robot_description": Command(["xacro ", os.path.join(pkg_simulation, "urdf/robot.urdf")])}
         ],
     )
 
-    spawn_pippo = Node(
+    spawn_robot = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'pippo', '-topic', '/pippo/robot_description', '-x', '-0.0', '-y', '-0.5'],
+        arguments=['-entity', 'robot', '-topic', '/robot/robot_description', '-x', '-0.0', '-y', '-0.5'],
         output='screen'
     )
 
     rviz = Node(
         package="rviz2",
         executable="rviz2",
-        namespace="pippo",
+        namespace="robot",
         name="rviz2",
         output="screen",
         arguments=["-d", os.path.join(pkg_simulation, "rviz/simulation.rviz")],
     )
 
     return LaunchDescription([
-        # gazebo,
         launch_arm,
-        pippo_state_publisher,
-        spawn_pippo,
-        rviz
+        robot_state_publisher,
+        spawn_robot,
+        # rviz
     ])
